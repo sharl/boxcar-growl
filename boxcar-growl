@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+use strict;
+use Net::Netrc;
+use LWP::UserAgent;
+use HTTP::Request::Common qw(POST);
+
+my $BOXCAR_DOMAIN = 'boxcar.io';
+my $netrc = Net::Netrc->lookup($BOXCAR_DOMAIN);
+
+my %formdata = (
+    'notification[from_screen_name]' => $ARGV[0],
+    'notification[message]' => $ARGV[1],
+    'notification[from_remote_service_id]' => time,
+    );
+my $postURI = "https://$BOXCAR_DOMAIN/notifications";
+my $req = POST($postURI, [%formdata]);
+$req->authorization_basic($netrc->login, $netrc->password);
+
+my $ua = LWP::UserAgent->new(timeout => 10);
+my $res = $ua->request($req);
+if (! $res->is_success) {
+    print $res->message . "\n";
+}
