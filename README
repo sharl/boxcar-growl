@@ -7,14 +7,17 @@ Copyright(C) Sharl Morlaroll <sharl@hauN.org>
 * Installation
 
 1. Join Boxcar (http://boxcar.io/)
-2. Write to ~/.netrc
+2. Install Boxcar
+3. Add Boxcar service "Growl"
+
+4. Write to ~/.netrc
 
 machine boxcar.io
 	login           EmailAddress
 	password        Password
 
-3. Let's try!
+5. Let's try!
 
 	$ boxcar-growl test "push to boxcar by boxcar-growl"
 
-4. Done.
+6. Done.
