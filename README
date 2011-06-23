@@ -1,0 +1,20 @@
+boxcar-growl - Push notification to Boxcar for iPhone/iPad
+
+Copyright(C) Sharl Morlaroll <sharl@hauN.org>
+
+* License - Perl/Artistic
+
+* Installation
+
+1. Join Boxcar (http://boxcar.io/)
+2. Write to ~/.netrc
+
+machine boxcar.io
+	login           EmailAddress
+	password        Password
+
+3. Let's try!
+
+	$ boxcar-growl test "push to boxcar by boxcar-growl"
+
+4. Done.
