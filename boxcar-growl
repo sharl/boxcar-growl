@@ -11,6 +11,7 @@ my $netrc = Net::Netrc->lookup($BOXCAR_DOMAIN);
 my %formdata = (
     'notification[from_screen_name]' => $ARGV[0],
     'notification[message]' => $ARGV[1],
+    'notification[icon_url]' => $ARGV[2] ? $ARGV[2] : undef,
     'notification[from_remote_service_id]' => time,
     );
 my $postURI = "https://$BOXCAR_DOMAIN/notifications";
