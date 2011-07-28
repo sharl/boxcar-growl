@@ -19,5 +19,6 @@ machine boxcar.io
 5. Let's try!
 
 	$ boxcar-growl test "push to boxcar by boxcar-growl"
+	$ boxcar-growl sharl "puppet icon notification test." --icon http://sharl.haun.org/puppet.png
 
 6. Done.
