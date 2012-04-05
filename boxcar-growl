@@ -1,24 +1,49 @@
 #!/usr/bin/perl
 
 use strict;
+use File::Basename;
 use Net::Netrc;
 use LWP::UserAgent;
 use HTTP::Request::Common qw(POST);
 use Getopt::Long;
 
+my $script   = basename($0);
 my $icon_url = undef;
-GetOptions(
-    "icon=s" => \$icon_url,
+my $env_icon = uc($script) . '_ICON'; $env_icon =~ s/-/_/g;
+my $r = GetOptions("icon=s" => \$icon_url
     );
+if (! $r or $#ARGV < 0) {
+    print <<EOF;
+usage: $script [-i|--icon <icon URL>] <from screen name> [message]
+	-i|--icon URL	specify icon URL
+
+environment variable:
+$env_icon	specify default icon URL
+
+Standard icon size is 57x57.
+
+EOF
+;
+    exit -1;
+}
+
+my $from_screen_name = shift @ARGV;
+my $message = join(' ', @ARGV);
+if (! $message) {
+    my @message = <STDIN>;
+    $message = join('', @message);
+    $message =~ s/[\r\n]/ /g;
+}
+$icon_url = $ENV{$env_icon} if (! $icon_url and $ENV{$env_icon});
 
 my $BOXCAR_DOMAIN = 'boxcar.io';
 my $netrc = Net::Netrc->lookup($BOXCAR_DOMAIN);
 
 my %formdata = (
-    'notification[from_screen_name]' => $ARGV[0],
-    'notification[message]' => $ARGV[1],
+    'notification[from_screen_name]' => $from_screen_name,
+    'notification[message]' => $message,
     'notification[icon_url]' => $icon_url,
-    'notification[from_remote_service_id]' => time,
+    'notification[from_remote_service_id]' => time . $$,
     );
 my $postURI = "https://$BOXCAR_DOMAIN/notifications";
 my $req = POST($postURI, [%formdata]);

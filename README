@@ -1,4 +1,4 @@
-boxcar-growl - Push notification to Boxcar for iPhone/iPad
+boxcar-growl - Push notification to Boxcar for iPhone/iPad/Mac
 
 Copyright(C) Sharl Morlaroll <sharl@hauN.org>
 
@@ -7,7 +7,7 @@ Copyright(C) Sharl Morlaroll <sharl@hauN.org>
 * Installation
 
 1. Join Boxcar (http://boxcar.io/)
-2. Install Boxcar
+2. Install Boxcar to device
 3. Add Boxcar service "Growl"
 
 4. Write to ~/.netrc
@@ -19,6 +19,12 @@ machine boxcar.io
 5. Let's try!
 
 	$ boxcar-growl test "push to boxcar by boxcar-growl"
-	$ boxcar-growl sharl "puppet icon notification test." --icon http://sharl.haun.org/puppet.png
+	$ echo foo bar | boxcar-growl qux
+	$ boxcar-growl "from stdin"
+	foo bar
+	^D
 
-6. Done.
+	$ boxcar-growl sharl "puppet icon notification test." --icon http://sharl.hauN.org/puppet.png
+	$ BOXCAR_GROWL_ICON=http://sharl.hauN.org/puppet.png boxcar-growl sharl "This is default icon setting."
+
+	Standard icon size is 57x57.
