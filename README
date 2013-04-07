@@ -28,3 +28,16 @@ machine boxcar.io
 	$ BOXCAR_GROWL_ICON=http://sharl.hauN.org/puppet.png boxcar-growl sharl "This is default icon setting."
 
 	Standard icon size is 57x57.
+
+* Troubleshooting
+
+If you get the following error when running the script:
+
+        "can't verify ssl peers without knowing which certificate authorities to trust"
+
+Then you need to install and/or update your LWP::UserAgent and Mozilla::CA perl libraries[1]. You can do this as follows:
+
+	$ sudo cpan
+	install LWP::UserAgent Mozilla::CA
+
+[1] See the following post for details: http://www.perlmonks.org/?node_id=892166
