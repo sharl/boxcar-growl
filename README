@@ -1,33 +1,36 @@
-boxcar-growl - Push notification to Boxcar for iPhone/iPad/Mac
+boxcar-growl - Push notification to Boxcar 2
 
 Copyright(C) Sharl Morlaroll <sharl@hauN.org>
 
 * License - Perl/Artistic
 
-* Installation
+* Settings
 
-1. Join Boxcar (http://boxcar.io/)
-2. Install Boxcar to device
-3. Add Boxcar service "Growl"
+1. Install Boxcar 2 to your device
 
-4. Write to ~/.netrc
+   http://boxcar.io/client
 
-machine boxcar.io
-	login           EmailAddress
-	password        Password
+2. get "ACCESS TOKEN"
 
-5. Let's try!
+   https://boxcar.uservoice.com/knowledgebase/articles/314474-how-to-get-my-boxcar-access-token
 
-	$ boxcar-growl test "push to boxcar by boxcar-growl"
+3. Write "ACCESS TOKEN" to ~/.boxcar-growl
+
+token = xxxxxxxxxxxxxxxxxx
+
+4. Let's try!
+
+	$ boxcar-growl test "push to boxcar 2 by boxcar-growl" --sound light
 	$ echo foo bar | boxcar-growl qux
 	$ boxcar-growl "from stdin"
-	foo bar
+	foo
+	bar
+	qux
 	^D
 
-	$ boxcar-growl sharl "puppet icon notification test." --icon http://sharl.hauN.org/puppet.png
-	$ BOXCAR_GROWL_ICON=http://sharl.hauN.org/puppet.png boxcar-growl sharl "This is default icon setting."
+sound name list:
 
-	Standard icon size is 57x57.
+   https://boxcar.uservoice.com/knowledgebase/articles/306788-how-to-send-your-boxcar-account-a-notification
 
 * Troubleshooting
 

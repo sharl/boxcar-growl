@@ -1,56 +1,52 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
 use strict;
+use warnings;
 use File::Basename;
-use Net::Netrc;
+use Config::Tiny;
 use LWP::UserAgent;
-use HTTP::Request::Common qw(POST);
 use Getopt::Long;
 
-my $script   = basename($0);
-my $icon_url = undef;
-my $env_icon = uc($script) . '_ICON'; $env_icon =~ s/-/_/g;
-my $r = GetOptions("icon=s" => \$icon_url
-    );
+my $prog = basename($0);
+my $conf = $ENV{HOME}.'/.'.$prog;
+(my $source = $prog) =~ s/[_-]/ /g;
+my $r = GetOptions(
+    'sound=s' => \my $sound,
+);
 if (! $r or $#ARGV < 0) {
     print <<EOF;
-usage: $script [-i|--icon <icon URL>] <from screen name> [message]
-	-i|--icon URL	specify icon URL
+usage: $prog [-s|--sound <sound name>] <title> [message]
 
-environment variable:
-$env_icon	specify default icon URL
+	-s|--sound <sound>	specify sound name
 
-Standard icon size is 57x57.
+sound name list:
+
+   https://boxcar.uservoice.com/knowledgebase/articles/306788-how-to-send-your-boxcar-account-a-notification
 
 EOF
 ;
     exit -1;
 }
 
-my $from_screen_name = shift @ARGV;
+my $title = shift @ARGV;
 my $message = join(' ', @ARGV);
 if (! $message) {
     my @message = <STDIN>;
     $message = join('', @message);
-    $message =~ s/[\r\n]/ /g;
 }
-$icon_url = $ENV{$env_icon} if (! $icon_url and $ENV{$env_icon});
-
-my $BOXCAR_DOMAIN = 'boxcar.io';
-my $netrc = Net::Netrc->lookup($BOXCAR_DOMAIN);
+my $ini = Config::Tiny->read($conf) || die Config::Tiny->errstr;
 
 my %formdata = (
-    'notification[from_screen_name]' => $from_screen_name,
-    'notification[message]' => $message,
-    'notification[icon_url]' => $icon_url,
-    'notification[from_remote_service_id]' => time . $$,
+    user_credentials => $ini->{_}{token},
+    'notification[title]' => $title,
+    'notification[long_message]' => $message,
+    'notification[sound]' => $sound || 'clanging',
+    'notification[source_name]' => $source,
     );
-my $postURI = "https://$BOXCAR_DOMAIN/notifications";
-my $req = POST($postURI, [%formdata]);
-$req->authorization_basic($netrc->login, $netrc->password);
 
-my $ua = LWP::UserAgent->new(timeout => 10);
-my $res = $ua->request($req);
+my $res = LWP::UserAgent->new(timeout => 10)->post(
+    'https://new.boxcar.io/api/notifications',
+    \%formdata);
 if (! $res->is_success) {
     print $res->message . "\n";
 }
